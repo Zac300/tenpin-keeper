@@ -1,0 +1,92 @@
+
+entity Centre {
+	name String
+}
+
+entity Ball {
+	name String
+}
+
+entity Manufacturer {
+	name String
+}
+
+entity Series {
+	date Instant
+	total Long
+}
+
+entity Game {
+	score Long
+}
+
+entity Frame {
+	number  FrameNumber
+}
+
+enum FrameNumber {
+	ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE
+}
+
+entity Shot {
+  number ShotNumber
+}
+
+enum ShotNumber {
+	ONE, TWO
+}
+
+entity Pin {
+	number PinNumber
+    standing Boolean
+}
+
+enum PinNumber {
+	ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN
+}
+
+
+relationship OneToMany {
+	Game{frame(number)} to Frame{game}
+}
+
+relationship OneToMany {
+	Frame{shot(number)} to Shot{frame}
+}
+
+relationship ManyToOne {
+   Shot{ball} to Ball{shot}
+}
+
+relationship OneToMany {
+  Shot{pin(name)} to Pin
+}
+
+relationship ManyToOne {
+  Manufacturer{ball} to Ball{manufacturer}
+}
+
+relationship OneToMany {
+	Series{games} to Game{series}
+}
+
+relationship OneToMany {
+	Centre to Series{centre}
+}
+
+relationship ManyToOne {
+	Series{bowler} to User{series}
+}
+
+relationship ManyToMany {
+	Job{task(title)} to Task{job}
+}
+
+// Set pagination options
+paginate Series with infinite-scroll
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
